@@ -1,0 +1,87 @@
+package com.test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+
+import java.awt.Robot;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
+import com.utility.ScrittoreTestuale;
+
+public class TestPrincipale {
+	
+	public static void main(String[] args)throws InterruptedException, Exception{
+		System.setProperty("webdriver.chrome.driver", "C:/Users/dcalderone/workspace/SeleniumProject/lib/chromedriver.exe");
+		
+		WebDriver driver = new ChromeDriver();
+		
+		Robot robot = new Robot();
+		
+		//indirizzo di tt.staff.aruba.it di DEV
+		// "http://95.110.150.218" 
+		driver.get("https://www.autohero.com/de/search/");
+		
+		
+		try{	
+			for(int i=0;i<5;i++){
+				robot.keyPress(KeyEvent.VK_CONTROL);
+				robot.keyPress(KeyEvent.VK_MINUS);
+				robot.keyRelease(KeyEvent.VK_CONTROL);
+				robot.keyRelease(KeyEvent.VK_MINUS);
+				
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		Actions builder= new Actions(driver);
+		WebElement button= driver.findElement(By.cssSelector("#app > div > main > div.root___2DK8v.container > div > div.col-md-3 > div > div.hidden-xs.hidden-sm > button"));
+		Action clickPulsante = builder.moveToElement(button).click().build();
+		clickPulsante.perform();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("document.getElementsByClassName('root___HcTec link-secondary btn btn-link btn-block')[0].click()");
+		Actions builderPointMover =new Actions(driver);
+		
+		WebElement sXCursor= driver.findElement(By.cssSelector("#app > div > main > div.root___2DK8v.container > div > div.col-md-9 > div > div > div:nth-child(2) > div:nth-child(1) > div > div.row > div > div > div.input-range > div > span:nth-child(2) > div"));
+		Point a=sXCursor.getLocation();//x=766, y=407
+		js.executeScript("document.getElementsByClassName('input-range__slider')[0].setAttribute('draggable',true);");
+		Action dragAndDropSx= builderPointMover.dragAndDropBy(sXCursor, 766, 0).build();
+		dragAndDropSx.perform();
+		WebElement dXCursor= driver.findElement(By.cssSelector("#app > div > main > div.root___2DK8v.container > div > div.col-md-9 > div > div > div:nth-child(2) > div:nth-child(1) > div > div.row > div > div > div.input-range > div > span:nth-child(3) > div"));
+		Point b=dXCursor.getLocation();
+		js.executeScript("document.getElementsByClassName('input-range__slider')[1].setAttribute('draggable',true);");
+		Action dragAndDropDx= builderPointMover.dragAndDropBy(dXCursor, -25, 0).build();
+		dragAndDropDx.perform();
+		///if doesn't works with previous instructions..
+		js.executeScript("document.getElementsByClassName('input-range__track input-range__track--active')[0].setAttribute('style','left: 44.4444%; width: 55.5556%;');");
+		js.executeScript("document.getElementsByClassName('input-range__slider-container')[0].setAttribute('style','position: absolute; left: 40%;');");
+		js.executeScript("document.getElementsByClassName('input-range__slider')[0].setAttribute('aria-valuenow',9);");
+		js.executeScript("document.getElementsByClassName('input-range__track input-range__track--active')[0].setAttribute('style','left: 44.4444%; width: 33.3333%;');");
+		js.executeScript("document.getElementsByClassName('input-range__slider')[0].setAttribute('aria-valuemax',16);");
+		js.executeScript("document.getElementsByClassName('input-range__slider-container')[1].setAttribute('style','position: absolute; left: 77.7778%;');");
+		//To calculate output values of filtering
+		Thread.sleep(1500);	
+		//
+		//Push button to load the page with result of filtering
+		//
+		builder.moveToElement(driver.findElement(By.xpath("//*[@id='app']/div/main/div[5]/div/div/div/div/div/div/a"))).click().build().perform();
+		driver.findElement(By.xpath("//*[@id='app']/div/main/div[5]/div/div/div/div/div/div/a")).click();
+		//
+		driver.findElement(By.xpath("//*[@id='react-select-14--value']/div[1]")).click();
+		//
+		driver.findElement(By.xpath("//*[@id='app']/div/main/div[4]/div/div[2]/div/div[2]/div[1]/div[1]")).click();
+		///
+		//... to be finished with other parts of checking into List<object> of result 
+		
+	}
+
+
+}
